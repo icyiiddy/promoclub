@@ -1,18 +1,20 @@
+import 'regenerator-runtime/runtime.js';
 import { config } from 'dotenv';
-import "regenerator-runtime/runtime.js";
 
 config();
 
 export const development = {
-  url: process.env.DB_URL,
+	url: process.env.DB_URL,
   dialect: 'postgres',
+  logging: false
 };
-
 export const test = {
-  url: process.env.DB_URL,
-  dialect: 'postgres',
+	url: process.env.DB_URL,
+	dialect: 'postgres',
+  logging: false
 };
 export const production = {
-  url: process.env.DB_URL,
-  dialect: 'postgres',
+	url: process.env.DB_URL,
+	dialect: 'postgres',
+  logging: false
 };
