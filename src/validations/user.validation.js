@@ -1,20 +1,27 @@
 import Joi from '@hapi/joi';
 import ResponseService from '../services/response.service';
 
-export const signupValidation = (req, res, next) => {
+export const validateSignup = (req, res, next) => {
 	const signupSchema = Joi.object({
 		firstName: Joi.string().trim().required().min(4).messages({
 			'any.required': 'First Name is required',
+			'string.empty': 'First Name is not allowed to be empty',
+			'string.min': 'First Name length must be at least 4 characters long',
 		}),
 		lastName: Joi.string().trim().required().min(4).messages({
 			'any.required': 'Last Name is required',
+			'string.empty': 'Last Name is not allowed to be empty',
+			'string.min': 'Last Name length must be at least 4 characters long',
 		}),
 		email: Joi.string().trim().email().required().messages({
 			'any.required': 'Email is required',
 			'string.email': 'Email must be a valid email',
+			'string.empty': 'Email is not allowed to be empty',
 		}),
 		password: Joi.string().trim().required().min(6).messages({
 			'any.required': 'Password is required',
+			'string.min': 'Password length must be at least 6 characters long',
+			'string.empty': 'Password is not allowed to be empty',
 			'string.min': 'Password length must be at least 6 characters long',
 		}),
 		confirmPassword: Joi.string()
@@ -23,10 +30,34 @@ export const signupValidation = (req, res, next) => {
 			.messages({
 				'any.required': 'Confirm Password is required',
 				'any.only': 'Passwords must match',
+				'string.empty': 'Confirm Password is not allowed to be empty',
 			}),
 	}).options({ abortEarly: false });
 
 	const { error } = signupSchema.validate(req.body);
+
+	if (error) {
+		const errors = error.details.map(error => error.message);
+		ResponseService.setError(400, errors);
+		return ResponseService.send(res);
+	}
+	next();
+};
+
+export const validateLogin = (req, res, next) => {
+	const loginSchama = Joi.object({
+		email: Joi.string().email().required().messages({
+			'any.required': 'Email is required',
+			'string.email': 'Email must be a valid email',
+			'string.empty': 'Email is not allowed to be empty',
+		}),
+		password: Joi.string().required().messages({
+			'any.required': 'Password is required',
+			'string.empty': 'Password is not allowed to be empty',
+		}),
+	}).options({ abortEarly: false });
+
+	const { error } = loginSchama.validate(req.body);
 
 	if (error) {
 		const errors = error.details.map(error => error.message);
