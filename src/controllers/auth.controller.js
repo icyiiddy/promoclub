@@ -1,6 +1,7 @@
 import UserService from '../services/user.service';
 import ResponseService from '../services/response.service';
 import BcryptService from '../services/bcrypt.service';
+import TokenService from '../services/token.service';
 
 class AuthController {
 	static async signup(req, res) {
@@ -11,26 +12,35 @@ class AuthController {
 			password: BcryptService.hashPassword(req.body.password),
 		});
 
-		const {
-			id,
-			firstName,
-			lastName,
-			email,
-			role,
-			createdAt,
-			updatedAt,
-		} = newUser;
-
 		ResponseService.setSuccess(201, 'Created', {
-			id,
-			firstName,
-			lastName,
-			email,
-			role,
-			createdAt,
-			updatedAt,
+			id: newUser.id,
+			firstName: newUser.firstName,
+			lastName: newUser.lastName,
+			email: newUser.email,
+			role: newUser.role,
+			createdAt: newUser.createdAt,
+			updatedAt: newUser.updatedAt,
 		});
 		return ResponseService.send(res);
+	}
+
+	static async login(req, res) {
+		const user = await UserService.findByProperty({
+			email: req.body.email,
+		});
+
+		ResponseService.setSuccess(200, 'You are successfully logged in', {
+			token: TokenService.generateToken({
+				id: user.id,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				email: user.email,
+				role: user.role,
+				createdAt: user.createdAt,
+				updatedAt: user.updatedAt
+			}),
+		});
+		ResponseService.send(res);
 	}
 }
 
