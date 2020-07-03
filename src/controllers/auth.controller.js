@@ -37,7 +37,23 @@ class AuthController {
 				email: user.email,
 				role: user.role,
 				createdAt: user.createdAt,
-				updatedAt: user.updatedAt
+				updatedAt: user.updatedAt,
+			}),
+		});
+		ResponseService.send(res);
+	}
+
+	static async loginWithSocialMedias(req, res) {
+		const user = await UserService.findByProperty({ email: req.user.email });
+		ResponseService.setSuccess(200, 'You are successfully logged in', {
+			token: TokenService.generateToken({
+				id: user.id,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				email: user.email,
+				role: user.role,
+				createdAt: user.createdAt,
+				updatedAt: user.updatedAt,
 			}),
 		});
 		ResponseService.send(res);
