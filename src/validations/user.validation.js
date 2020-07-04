@@ -1,6 +1,12 @@
 import Joi from '@hapi/joi';
 import ResponseService from '../services/response.service';
 
+/**
+ * @param  {object} req
+ * @param  {object} res
+ * @param  {function} next
+ * @returns {object} this function validates signup body fields
+ */
 export const validateSignup = (req, res, next) => {
 	const signupSchema = Joi.object({
 		firstName: Joi.string().trim().required().min(4).messages({
@@ -44,6 +50,12 @@ export const validateSignup = (req, res, next) => {
 	next();
 };
 
+/**
+ * @param  {object} req
+ * @param  {object} res
+ * @param  {function} next
+ * @returns {object} this function validates login body fields
+ */
 export const validateLogin = (req, res, next) => {
 	const loginSchama = Joi.object({
 		email: Joi.string().email().required().messages({
