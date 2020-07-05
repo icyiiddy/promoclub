@@ -1,6 +1,7 @@
 import UserService from '../services/user.service';
 import ResponseService from '../services/response.service';
 import BcryptService from '../services/bcrypt.service';
+import TokenService from '../services/token.service';
 
 /**
  * @param  {object} req
@@ -95,3 +96,45 @@ export async function getFacebookProfileUserInfo(
 	}
 	done(null, newUser);
 }
+/**
+ * @param  {object} req
+ * @param  {object} res
+ * @param  {function} next
+ * @returns {object} this function check if user account exists.
+ */
+export async function checkUserEmailExists(req, res, next) {
+	const user = await UserService.findByProperty({ email: req.body.email });
+
+	if (!user) {
+		ResponseService.setError(
+			404,
+			'Results not found, make sure you have an account'
+		);
+		return ResponseService.send(res);
+	}
+	next();
+}
+
+export const allowAssessRoute = (req, res, next) => {
+	const bearerHeader = req.headers.authorization;
+
+	if (typeof bearerHeader !== 'undefined') {
+		const bearer = bearerHeader.split(' ');
+		const bearerToken = bearer[1];
+		req.token = bearerToken;
+		const { name } = TokenService.verifyToken(req.token);
+
+		if (name === 'JsonWebTokenError') {
+			ResponseService.setError(401, 'Unauthorized, invalid token');
+			return ResponseService.send(res);
+		}
+		req.userData = TokenService.verifyToken(req.token);
+		next();
+	} else {
+		ResponseService.setError(
+			403,
+			'You can not proceed without setting authorization token'
+		);
+		return ResponseService.send(res);
+	}
+};

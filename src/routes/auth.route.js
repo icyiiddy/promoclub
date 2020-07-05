@@ -1,14 +1,27 @@
 import express from 'express';
 import passport from 'passport';
 import AuthController from '../controllers/auth.controller';
-import { validateSignup, validateLogin } from '../validations/user.validation';
-import { checkUserExists, loginUser } from '../middlewares/user.middleware';
+import {
+	validateSignup,
+	validateLogin,
+	validateUserEmail,
+	validateUserResetPassword,
+} from '../validations/user.validation';
+import {
+	checkUserExists,
+	loginUser,
+	checkUserEmailExists,
+	allowAssessRoute,
+} from '../middlewares/user.middleware';
 
 const router = express.Router();
 
 router.post('/signup', checkUserExists, validateSignup, AuthController.signup);
 router.post('/login', validateLogin, loginUser, AuthController.login);
-router.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }));
+router.get(
+	'/google',
+	passport.authenticate('google', { scope: ['email', 'profile'] })
+);
 router.get(
 	'/google/redirect',
 	passport.authenticate('google', {
@@ -20,8 +33,23 @@ router.get(
 router.get('/facebook', passport.authenticate('facebook'));
 router.get(
 	'/facebook/redirect',
-	passport.authenticate('facebook', { session: false, failureRedirect: '/login' }),
+	passport.authenticate('facebook', {
+		session: false,
+		failureRedirect: '/login',
+	}),
 	AuthController.loginWithSocialMedias
+);
+router.get(
+	'/search-account',
+	validateUserEmail,
+	checkUserEmailExists,
+	AuthController.SearchAccount
+);
+router.patch(
+	'/reset-password',
+	allowAssessRoute,
+	validateUserResetPassword,
+	AuthController.ResetPassword
 );
 
 export default router;

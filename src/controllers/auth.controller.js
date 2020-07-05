@@ -2,6 +2,8 @@ import UserService from '../services/user.service';
 import ResponseService from '../services/response.service';
 import BcryptService from '../services/bcrypt.service';
 import TokenService from '../services/token.service';
+import SendEmailService from '../services/send-email.service';
+import { emailBody } from '../helpers/mails/email.body';
 
 class AuthController {
 	static async signup(req, res) {
@@ -40,7 +42,7 @@ class AuthController {
 				updatedAt: user.updatedAt,
 			}),
 		});
-		ResponseService.send(res);
+		return ResponseService.send(res);
 	}
 
 	static async loginWithSocialMedias(req, res) {
@@ -56,7 +58,27 @@ class AuthController {
 				updatedAt: user.updatedAt,
 			}),
 		});
-		ResponseService.send(res);
+		return ResponseService.send(res);
+	}
+
+	static async SearchAccount(req, res) {
+		const token = TokenService.generateToken({ email: req.body.email });
+		SendEmailService.sendEmailToUser(
+			req.body.email,
+			'Reset your password',
+			emailBody(token)
+		);
+		ResponseService.setSuccess(200, 'Email sent to you for verification');
+		return ResponseService.send(res);
+	}
+
+	static async ResetPassword(req, res) {
+		await UserService.updateProperty(
+			{ email: req.userData.email },
+			{ password: BcryptService.hashPassword(req.body.password) }
+		);
+		ResponseService.setSuccess(200, 'Password reset was success');
+		return ResponseService.send(res);
 	}
 }
 
