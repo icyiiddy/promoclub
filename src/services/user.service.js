@@ -18,6 +18,13 @@ class UserService {
 	static findByProperty(property) {
 		return User.findOne({ where: property });
 	}
+
+	static updateProperty(clause, property) {
+    return User.update(property, {
+      where: clause,
+      returning: true
+		});
+	}	
 }
 
 export default UserService;

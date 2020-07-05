@@ -78,3 +78,54 @@ export const validateLogin = (req, res, next) => {
 	}
 	next();
 };
+/**
+ * @param  {object} req
+ * @param  {object} res
+ * @param  {function} next
+ * @returns {object} this function validate user email
+ */
+export const validateUserEmail = (req, res, next) => {
+	const schema = Joi.object({
+		email: Joi.string().email().required().messages({
+			'any.required': 'Email is required',
+			'string.empty': 'Email is not allowed to be empty',
+			'string.email': 'Email must be a valid email',
+		}),
+	}).options({ abortEarly: false });
+
+	const { error } = schema.validate(req.body);
+
+	if (error) {
+		const errors = error.details.map(error => error.message);
+		ResponseService.setError(400, errors);
+		return ResponseService.send(res);
+	}
+	next();
+};
+
+export const validateUserResetPassword = (req, res, next) => {
+	const schema = Joi.object({
+		password: Joi.string().min(6).required().messages({
+			'any.required': 'Password is required',
+			'string.empty': 'Password is not allowed to be empty',
+			'string.min': 'Password length must be at least 6 characters long',
+		}),
+		confirmPassword: Joi.string()
+			.required()
+			.valid(Joi.ref('password'))
+			.messages({
+				'any.required': 'Confirm Password is required',
+				'string.empty': 'Confirm Password is not allowed to be empty',
+				'any.only': 'Passwords must match',
+			}),
+	}).options({ abortEarly: false });
+
+	const { error } = schema.validate(req.body);
+
+	if (error) {
+		const errors = error.details.map(error => error.message);
+		ResponseService.setError(400, errors);
+		return ResponseService.send(res);
+	}
+	next();
+};
