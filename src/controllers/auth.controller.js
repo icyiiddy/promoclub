@@ -80,6 +80,18 @@ class AuthController {
 		ResponseService.setSuccess(200, 'Password reset was success');
 		return ResponseService.send(res);
 	}
+
+	static async AdditionalInformation(req, res) {
+		const profilePicture = req.files.profilePicture;
+		profilePicture.mv(`./src/uploads/${profilePicture.name}`);
+		ResponseService.setSuccess(200, 'Success', {
+			name: profilePicture.name,
+			mimetype: profilePicture.mimetype,
+			size: profilePicture.size,
+			path: `./src/uploads/${profilePicture.name}`,
+		});
+		return ResponseService.send(res);
+	}
 }
 
 export default AuthController;

@@ -6,6 +6,7 @@ import {
 	validateLogin,
 	validateUserEmail,
 	validateUserResetPassword,
+	validateAdditionalInfo,
 } from '../validations/user.validation';
 import {
 	checkUserExists,
@@ -50,6 +51,11 @@ router.patch(
 	allowAssessRoute,
 	validateUserResetPassword,
 	AuthController.ResetPassword
+);
+router.post(
+	'/add-info',
+	validateAdditionalInfo,
+	AuthController.AdditionalInformation
 );
 
 export default router;
