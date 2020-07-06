@@ -81,14 +81,21 @@ class AuthController {
 		return ResponseService.send(res);
 	}
 
-	static async AdditionalInformation(req, res) {
-		const profilePicture = req.files.profilePicture;
-		profilePicture.mv(`./src/uploads/${profilePicture.name}`);
+	static async viewProfile(req, res) {
+		const user = await UserService.findByProperty({
+			id: parseInt(req.params.id),
+		});
 		ResponseService.setSuccess(200, 'Success', {
-			name: profilePicture.name,
-			mimetype: profilePicture.mimetype,
-			size: profilePicture.size,
-			path: `./src/uploads/${profilePicture.name}`,
+			id: user.id,
+			firstName: user.firstName,
+			lastName: user.lastName,
+			email: user.email,
+			dateOfBirth: user.dateOfBirth,
+			address: user.address,
+			profilePicture: user.profilePicture,
+			role: user.role,
+			createdAt: user.createdAt,
+			updatedAt: user.updatedAt,
 		});
 		return ResponseService.send(res);
 	}

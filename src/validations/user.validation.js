@@ -133,40 +133,21 @@ export const validateUserResetPassword = (req, res, next) => {
 	next();
 };
 
-export const validateAdditionalInfo = (req, res, next) => {
+export const validateProfileInfo = (req, res, next) => {
 	const schema = Joi.object({
-		address: Joi.string().min(6),
-		dateOfBirth: JoiDate.date().utc().format('YYYY-MM-DD'),
+		id: Joi.string()
+			.regex(/^[1-9]{1,}$/)
+			.messages({
+				'string.pattern.base': 'Id must be a number',
+			}),
 	});
 
-	const { error } = schema.validate(req.body);
+	const { error } = schema.validate(req.params);
 
 	if (error) {
 		const errors = error.details.map(error => error.message);
 		ResponseService.setError(400, errors);
 		return ResponseService.send(res);
-	}
-
-	if (!req.files) {
-		ResponseService.setError(400, 'No file uploaded');
-		return ResponseService.send(res);
-	} else {
-		const profilePicture = req.files.profilePicture;
-		if (
-			profilePicture.mimetype !== 'image/jpg' &&
-			profilePicture.mimetype !== 'image/jpeg' &&
-			profilePicture.mimetype !== 'image/png'
-		) {
-			ResponseService.setError(
-				400,
-				'Only .jpg, .jpeg, .png extensions are allowed'
-			);
-			return ResponseService.send(res);
-		} else if (profilePicture.size > 5000000) {
-			console.log(!req.files);
-			ResponseService.setError(400, 'Profile image size must not exceed 5MB');
-			return ResponseService.send(res);
-		}
 	}
 	next();
 };

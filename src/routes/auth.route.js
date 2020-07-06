@@ -7,12 +7,14 @@ import {
 	validateUserEmail,
 	validateUserResetPassword,
 	validateAdditionalInfo,
+	validateProfileInfo,
 } from '../validations/user.validation';
 import {
 	checkUserExists,
 	loginUser,
 	checkUserEmailExists,
 	allowAssessRoute,
+	checkUserOwnProfile,
 } from '../middlewares/user.middleware';
 
 const router = express.Router();
@@ -52,10 +54,12 @@ router.patch(
 	validateUserResetPassword,
 	AuthController.ResetPassword
 );
-router.post(
-	'/add-info',
-	validateAdditionalInfo,
-	AuthController.AdditionalInformation
+router.get(
+	'/profile/:id',
+	allowAssessRoute,
+	validateProfileInfo,
+	checkUserOwnProfile,
+	AuthController.viewProfile
 );
 
 export default router;
