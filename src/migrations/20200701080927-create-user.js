@@ -18,6 +18,18 @@ export async function up(queryInterface, Sequelize) {
     password: {
       type: Sequelize.STRING
     },
+    dateOfBirth: {
+      allowNull: true,
+      type: Sequelize.DATE
+    },
+    address: {
+      allowNull: true,
+      type: Sequelize.STRING
+    },
+    profilePicture: {
+      type: Sequelize.STRING,
+      defaultValue: 'avatar.jpg'
+    },
     role: {
       type: Sequelize.ENUM('admin', 'moderator'),
       defaultValue: 'moderator'

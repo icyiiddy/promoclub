@@ -80,6 +80,25 @@ class AuthController {
 		ResponseService.setSuccess(200, 'Password reset was success');
 		return ResponseService.send(res);
 	}
+
+	static async viewProfile(req, res) {
+		const user = await UserService.findByProperty({
+			id: parseInt(req.params.id),
+		});
+		ResponseService.setSuccess(200, 'Success', {
+			id: user.id,
+			firstName: user.firstName,
+			lastName: user.lastName,
+			email: user.email,
+			dateOfBirth: user.dateOfBirth,
+			address: user.address,
+			profilePicture: user.profilePicture,
+			role: user.role,
+			createdAt: user.createdAt,
+			updatedAt: user.updatedAt,
+		});
+		return ResponseService.send(res);
+	}
 }
 
 export default AuthController;

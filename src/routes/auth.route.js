@@ -6,12 +6,15 @@ import {
 	validateLogin,
 	validateUserEmail,
 	validateUserResetPassword,
+	validateAdditionalInfo,
+	validateProfileInfo,
 } from '../validations/user.validation';
 import {
 	checkUserExists,
 	loginUser,
 	checkUserEmailExists,
 	allowAssessRoute,
+	checkUserOwnProfile,
 } from '../middlewares/user.middleware';
 
 const router = express.Router();
@@ -50,6 +53,13 @@ router.patch(
 	allowAssessRoute,
 	validateUserResetPassword,
 	AuthController.ResetPassword
+);
+router.get(
+	'/profile/:id',
+	allowAssessRoute,
+	validateProfileInfo,
+	checkUserOwnProfile,
+	AuthController.viewProfile
 );
 
 export default router;

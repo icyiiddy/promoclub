@@ -1,5 +1,8 @@
 import Joi from '@hapi/joi';
+import joiDate from '@hapi/joi-date';
 import ResponseService from '../services/response.service';
+
+const JoiDate = Joi.extend(joiDate);
 
 /**
  * @param  {object} req
@@ -9,15 +12,15 @@ import ResponseService from '../services/response.service';
  */
 export const validateSignup = (req, res, next) => {
 	const signupSchema = Joi.object({
-		firstName: Joi.string().trim().required().min(4).messages({
+		firstName: Joi.string().trim().required().min(2).messages({
 			'any.required': 'First Name is required',
 			'string.empty': 'First Name is not allowed to be empty',
-			'string.min': 'First Name length must be at least 4 characters long',
+			'string.min': 'First Name length must be at least 2 characters long',
 		}),
-		lastName: Joi.string().trim().required().min(4).messages({
+		lastName: Joi.string().trim().required().min(2).messages({
 			'any.required': 'Last Name is required',
 			'string.empty': 'Last Name is not allowed to be empty',
-			'string.min': 'Last Name length must be at least 4 characters long',
+			'string.min': 'Last Name length must be at least 2 characters long',
 		}),
 		email: Joi.string().trim().email().required().messages({
 			'any.required': 'Email is required',
@@ -121,6 +124,25 @@ export const validateUserResetPassword = (req, res, next) => {
 	}).options({ abortEarly: false });
 
 	const { error } = schema.validate(req.body);
+
+	if (error) {
+		const errors = error.details.map(error => error.message);
+		ResponseService.setError(400, errors);
+		return ResponseService.send(res);
+	}
+	next();
+};
+
+export const validateProfileInfo = (req, res, next) => {
+	const schema = Joi.object({
+		id: Joi.string()
+			.regex(/^[1-9]{1,}$/)
+			.messages({
+				'string.pattern.base': 'Id must be a number',
+			}),
+	});
+
+	const { error } = schema.validate(req.params);
 
 	if (error) {
 		const errors = error.details.map(error => error.message);

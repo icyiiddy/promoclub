@@ -138,3 +138,15 @@ export const allowAssessRoute = (req, res, next) => {
 		return ResponseService.send(res);
 	}
 };
+
+export async function checkUserOwnProfile(req, res, next) {
+	const user = await UserService.findByProperty({id: parseInt(req.params.id)})
+	if (!user) {
+		ResponseService.setError(
+			404,
+			"No user profile found"
+		);
+		return ResponseService.send(res);
+	}
+	next();
+}
