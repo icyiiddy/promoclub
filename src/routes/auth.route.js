@@ -15,6 +15,7 @@ import {
 	checkUserEmailExists,
 	allowAssessRoute,
 	checkUserOwnProfile,
+	findUser
 } from '../middlewares/user.middleware';
 
 const router = express.Router();
@@ -58,8 +59,16 @@ router.get(
 	'/profile/:id',
 	allowAssessRoute,
 	validateProfileInfo,
-	checkUserOwnProfile,
+	findUser,
 	AuthController.viewProfile
+);
+
+router.patch(
+	'/edit-profile/:id',
+	allowAssessRoute,
+	validateProfileInfo,
+	checkUserOwnProfile,
+	AuthController.editUserProfile
 );
 
 export default router;

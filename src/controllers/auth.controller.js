@@ -8,8 +8,8 @@ import { emailBody } from '../helpers/mails/email.body';
 class AuthController {
 	static async signup(req, res) {
 		const newUser = await UserService.createUser({
-			firstName: req.body.firstName,
-			lastName: req.body.lastName,
+			firstName: `${req.body.firstName.charAt(0).toUpperCase()}${req.body.firstName.slice(1)}`,
+			lastName: `${req.body.lastName.charAt(0).toUpperCase()}${req.body.lastName.slice(1)}`,
 			email: req.body.email,
 			password: BcryptService.hashPassword(req.body.password),
 		});
@@ -96,6 +96,37 @@ class AuthController {
 			role: user.role,
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt,
+		});
+		return ResponseService.send(res);
+	}
+
+	static async editUserProfile(req, res) {
+		req.files.profilePicture.mv(`./src/uploads/${req.files.profilePicture.name}`);
+		const id = parseInt(req.params.id);
+		await UserService.updateProperty(
+			{ id },
+			{
+				firstName: req.body.firstName,
+				lastName: req.body.lastName,
+				dateOfBirth: req.body.dateOfBirth,
+				address: req.body.address,
+				profilePicture: req.files.profilePicture.name,
+			}
+		);
+		const {
+			firstName,
+			lastName,
+			dateOfBirth,
+			address,
+			profilePicture,
+		} = await UserService.findByProperty({ id });
+
+		ResponseService.setSuccess(200, 'Profile has been updated', {
+			firstName,
+			lastName,
+			dateOfBirth,
+			address,
+			profilePicture,
 		});
 		return ResponseService.send(res);
 	}

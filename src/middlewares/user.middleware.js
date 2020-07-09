@@ -1,7 +1,11 @@
+import Joi from '@hapi/joi';
+import joiDate from '@hapi/joi-date';
 import UserService from '../services/user.service';
 import ResponseService from '../services/response.service';
 import BcryptService from '../services/bcrypt.service';
 import TokenService from '../services/token.service';
+
+const JoiDate = Joi.extend(joiDate);
 
 /**
  * @param  {object} req
@@ -139,14 +143,73 @@ export const allowAssessRoute = (req, res, next) => {
 	}
 };
 
-export async function checkUserOwnProfile(req, res, next) {
-	const user = await UserService.findByProperty({id: parseInt(req.params.id)})
+export async function findUser(req, res, next) {
+	const user = await UserService.findByProperty({
+		id: parseInt(req.params.id),
+	});
 	if (!user) {
+		ResponseService.setError(404, 'No user profile found');
+		return ResponseService.send(res);
+	}
+	next();
+}
+
+export async function checkUserOwnProfile(req, res, next) {
+	const user = await UserService.findByProperty({
+		id: parseInt(req.params.id),
+	});
+	if (req.userData.id !== parseInt(req.params.id)) {
 		ResponseService.setError(
-			404,
-			"No user profile found"
+			401,
+			'Unauthorized, make sure you have a valid token or it is your profile'
 		);
 		return ResponseService.send(res);
+	}
+
+	const schema = Joi.object({
+		firstName: Joi.string().min(2).default(user.firstName).messages({
+			'string.empty': 'First Name is not allowed to be empty',
+			'string.min': 'First Name length must be at least 2 characters long',
+		}),
+		lastName: Joi.string().min(2).messages({
+			'string.empty': 'Last Name is not allowed to be empty',
+			'string.min': 'Last Name length must be at least 2 characters long',
+		}),
+		dateOfBirth: JoiDate.date().utc().format('YYYY-MM-DD').messages({
+			'date.format': 'Date must be in YYYY-MM-DD format',
+		}),
+		address: Joi.string().min(4).messages({
+			'string.empty': 'Address is not allowed to be empty',
+			'string.min': 'Address length must be at least 4 characters long',
+		}),
+	}).options({ abortEarly: false });
+
+	const { error } = schema.validate(req.body);
+
+	if (error) {
+		const errors = error.details.map(error => error.message);
+		ResponseService.setError(400, errors);
+		return ResponseService.send(res);
+	}
+
+	if (!req.files) {
+		ResponseService.setError(400, 'No picture selected');
+		return ResponseService.send(res);
+	} else {
+		const { profilePicture } = req.files;
+		if (
+			profilePicture.mimetype !== 'image/jpg' &&
+			profilePicture.mimetype !== 'image/jpeg' &&
+			profilePicture.mimetype !== 'image/png'
+		) {
+			ResponseService.setError(400, 'Only jpg, jpeg, png files are allowed');
+			return ResponseService.send(res);
+		}
+
+		if (profilePicture.size > 5000000) {
+			ResponseService.setError(400, 'Picture size must not exceed 5MB');
+			return ResponseService.send(res);
+		}
 	}
 	next();
 }
