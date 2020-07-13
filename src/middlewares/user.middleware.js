@@ -167,7 +167,7 @@ export async function checkUserOwnProfile(req, res, next) {
 	}
 
 	const schema = Joi.object({
-		firstName: Joi.string().min(2).default(user.firstName).messages({
+		firstName: Joi.string().min(2).messages({
 			'string.empty': 'First Name is not allowed to be empty',
 			'string.min': 'First Name length must be at least 2 characters long',
 		}),

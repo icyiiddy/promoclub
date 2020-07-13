@@ -110,7 +110,7 @@ class AuthController {
 				lastName: req.body.lastName,
 				dateOfBirth: req.body.dateOfBirth,
 				address: req.body.address,
-				profilePicture: req.files.profilePicture.name,
+				profilePicture: req.files.profilePicture.name && req.files.profilePicture.name,
 			}
 		);
 		const {
