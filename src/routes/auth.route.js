@@ -6,7 +6,6 @@ import {
 	validateLogin,
 	validateUserEmail,
 	validateUserResetPassword,
-	validateAdditionalInfo,
 	validateProfileInfo,
 } from '../validations/user.validation';
 import {
@@ -15,7 +14,7 @@ import {
 	checkUserEmailExists,
 	allowAssessRoute,
 	checkUserOwnProfile,
-	findUser
+	findUser,
 } from '../middlewares/user.middleware';
 
 const router = express.Router();
