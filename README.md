@@ -10,4 +10,6 @@ Promoclub is a social media where people can share photos and comments. This API
 - PATCH `/api/auth/reset-password`: Reset password
 - GET `/api/auth/profile/:id`: View user profile
 - PATCH `/api/auth/edit-profile/:id`: Edit user profile
-- POST `/api/posts`: Post a status 
+- POST `/api/posts`: Post a status
+- GET `/api/posts`: Get all posts
+- GET `/api/posts/own-posts`: Get your own posts 
