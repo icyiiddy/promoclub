@@ -33,6 +33,17 @@ class PostService {
 			limit,
 		});
 	}
+
+	static findPost(postId) {
+		return Post.findOne({ where: postId });
+	}
+
+	static updatePost(postId, property) {
+    return Post.update(property, {
+      where: postId,
+      returning: true
+		});
+	}
 }
 
 export default PostService;

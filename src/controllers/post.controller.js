@@ -53,6 +53,18 @@ class PostController {
 		});
 		return ResponseService.send(res);
 	}
+
+	static async editPost(req, res) {
+		const { mediaFile } = req.files;
+		mediaFile.mv(`./src/uploads/${mediaFile.name}`);
+
+		const updatedPost = await PostService.updatePost(
+			{ id: parseInt(req.params.postId) },
+			{ post: req.body.post, mediaFile: mediaFile.name }
+		);
+		ResponseService.setSuccess(200, 'Post Updated', updatedPost);
+		ResponseService.send(res);
+	}
 }
 
 export default PostController;
