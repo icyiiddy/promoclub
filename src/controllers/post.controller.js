@@ -65,6 +65,12 @@ class PostController {
 		ResponseService.setSuccess(200, 'Post Updated', updatedPost);
 		ResponseService.send(res);
 	}
+
+	static async deletePost(req, res) {
+		await PostService.destroyPost({ id: parseInt(req.params.postId) });
+		ResponseService.setSuccess(200, 'Post deleted');
+		ResponseService.send(res);
+	}
 }
 
 export default PostController;

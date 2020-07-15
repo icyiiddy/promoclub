@@ -39,10 +39,14 @@ class PostService {
 	}
 
 	static updatePost(postId, property) {
-    return Post.update(property, {
-      where: postId,
-      returning: true
+		return Post.update(property, {
+			where: postId,
+			returning: true,
 		});
+	}
+
+	static destroyPost(postId) {
+		return Post.destroy({ where: postId });
 	}
 }
 
