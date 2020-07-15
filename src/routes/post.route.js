@@ -4,7 +4,7 @@ import { allowAssessRoute } from '../middlewares/user.middleware';
 import {
 	validateUserPost,
 	validatePostUrlParam,
-  validateUserEditPost,
+	validateUserEditPost,
 } from '../validations/post.validation';
 import {
 	checkUserAccount,
@@ -25,9 +25,10 @@ router.patch(
 	'/:postId/edit',
 	allowAssessRoute,
 	validatePostUrlParam,
-  checkPostOwner,
-  validateUserEditPost,
+	checkPostOwner,
+	validateUserEditPost,
 	PostController.editPost
 );
+router.delete('/:postId/delete', allowAssessRoute, validatePostUrlParam, checkPostOwner, PostController.deletePost);
 
 export default router;

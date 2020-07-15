@@ -22,4 +22,5 @@ This API has different endpoints which are:
 - POST `/api/posts`: Post a status
 - GET `/api/posts`: Get all posts
 - GET `/api/posts/view`: Get your own posts
-- PATCH `/api/posts/:postId/edit`: Edit post status 
+- PATCH `/api/posts/:postId/edit`: Edit post status
+- DELETE `/api/posts/:postId/delete`: Detele post status 
