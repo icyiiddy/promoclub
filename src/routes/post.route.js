@@ -6,21 +6,22 @@ import {
 	validatePostUrlParam,
 	validateUserEditPost,
 } from '../validations/post.validation';
+import { checkPostOwner } from '../middlewares/post.middleware';
+import CommentController from '../controllers/comment.controller';
 import {
-	checkUserAccount,
-	checkPostOwner,
-} from '../middlewares/post.middleware';
+	checkPostExists,
+	checkComment,
+} from '../middlewares/comment.middleware';
+import {
+	validatePostComment,
+	validateUrlIds,
+} from '../validations/comment.validation';
 
 const router = express.Router();
 
 router.post('/', allowAssessRoute, validateUserPost, PostController.postStatus);
 router.get('/', allowAssessRoute, PostController.viewPosts);
-router.get(
-	'/view',
-	allowAssessRoute,
-	checkUserAccount,
-	PostController.viewOwnPosts
-);
+router.get('/view', allowAssessRoute, PostController.viewOwnPosts);
 router.patch(
 	'/:postId/edit',
 	allowAssessRoute,
@@ -29,6 +30,44 @@ router.patch(
 	validateUserEditPost,
 	PostController.editPost
 );
-router.delete('/:postId/delete', allowAssessRoute, validatePostUrlParam, checkPostOwner, PostController.deletePost);
+router.delete(
+	'/:postId/delete',
+	allowAssessRoute,
+	validatePostUrlParam,
+	checkPostOwner,
+	PostController.deletePost
+);
+router.post(
+	'/:postId/comments',
+	allowAssessRoute,
+	validatePostUrlParam,
+	checkPostExists,
+	validatePostComment,
+	CommentController.postComment
+);
+router.get(
+	'/:postId/comments',
+	allowAssessRoute,
+	validatePostUrlParam,
+	checkPostExists,
+	CommentController.viewComments
+);
+router.patch(
+	'/:postId/comments/:commentId',
+	allowAssessRoute,
+	validateUrlIds,
+	checkPostExists,
+	checkComment,
+	validatePostComment,
+	CommentController.editComment
+);
+router.delete(
+	'/:postId/comments/:commentId',
+	allowAssessRoute,
+	validateUrlIds,
+	checkPostExists,
+	checkComment,
+	CommentController.deleteComment
+);
 
 export default router;

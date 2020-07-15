@@ -63,13 +63,13 @@ class PostController {
 			{ post: req.body.post, mediaFile: mediaFile.name }
 		);
 		ResponseService.setSuccess(200, 'Post Updated', updatedPost);
-		ResponseService.send(res);
+		return ResponseService.send(res);
 	}
 
 	static async deletePost(req, res) {
 		await PostService.destroyPost({ id: parseInt(req.params.postId) });
 		ResponseService.setSuccess(200, 'Post deleted');
-		ResponseService.send(res);
+		return ResponseService.send(res);
 	}
 }
 

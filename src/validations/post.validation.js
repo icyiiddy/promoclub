@@ -53,7 +53,7 @@ export async function validateUserPost(req, res, next) {
 export const validatePostUrlParam = (req, res, next) => {
 	const schema = Joi.object({
 		postId: Joi.string()
-			.regex(/^[1-9]{1,}$/)
+			.regex(/^[0-9]{1,}$/)
 			.messages({
 				'string.pattern.base': 'Id must be a number',
 			}),
