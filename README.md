@@ -23,4 +23,8 @@ This API has different endpoints which are:
 - GET `/api/posts`: Get all posts
 - GET `/api/posts/view`: Get your own posts
 - PATCH `/api/posts/:postId/edit`: Edit post status
-- DELETE `/api/posts/:postId/delete`: Detele post status 
+- DELETE `/api/posts/:postId/delete`: Detele post status
+- POST `/api/posts/:postId/comments`: Comment on a post
+- GET `/api/posts/:postId/comments`: View comments per post
+- PATCH `/api/posts/:postId/comments/:commentId`: Edit comment
+- DELETE `/api/posts/:postId/comments/:commentId`: Delete comment   
