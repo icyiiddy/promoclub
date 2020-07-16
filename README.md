@@ -27,4 +27,7 @@ This API has different endpoints which are:
 - POST `/api/posts/:postId/comments`: Comment on a post
 - GET `/api/posts/:postId/comments`: View comments per post
 - PATCH `/api/posts/:postId/comments/:commentId`: Edit comment
-- DELETE `/api/posts/:postId/comments/:commentId`: Delete comment   
+- DELETE `/api/posts/:postId/comments/:commentId`: Delete comment
+- GET `/api/notifications`: Get recipient notifications
+- PATCH `/api/notifications/:notificationId/read` Read recipient notification
+- PATCH `/api/notifications/mark-as-read` Mark all unread notification as read   

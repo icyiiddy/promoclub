@@ -132,6 +132,14 @@ export const allowAssessRoute = (req, res, next) => {
 			ResponseService.setError(401, 'Unauthorized, invalid token');
 			return ResponseService.send(res);
 		}
+
+		if (name === 'TokenExpiredError') {
+			ResponseService.setError(
+				401,
+				'Unauthorized, Token has expired signin again to get new token'
+			);
+			return ResponseService.send(res);
+		}
 		req.userData = TokenService.verifyToken(req.token);
 		next();
 	} else {

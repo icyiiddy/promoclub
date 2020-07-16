@@ -1,14 +1,29 @@
 import ResponseService from '../services/response.service';
 import CommentService from '../services/comment.service';
 import { paginationHelper } from '../helpers';
+import PostService from '../services/post.service';
+import NotificationService from '../services/notification.service';
 
 class CommentController {
 	static async postComment(req, res) {
+		const postId = parseInt(req.params.postId);
+		const userId = req.userData.id;
+		const recipient = await PostService.findPost({ id: postId });
+
 		const comment = await CommentService.createComment({
-			userId: req.userData.id,
-			postId: parseInt(req.params.postId),
+			userId,
+			postId,
 			comment: req.body.comment,
 		});
+
+		if (recipient.userId !== userId) {
+			await NotificationService.createNotification({
+				senderId: userId,
+				recipientId: recipient.userId,
+				postId,
+				type: 'comment',
+			});
+		}
 		ResponseService.setSuccess(201, 'Comment was posted', comment);
 		return ResponseService.send(res);
 	}

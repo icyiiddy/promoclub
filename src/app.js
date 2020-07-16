@@ -3,6 +3,7 @@ import passport from 'passport';
 import { config } from 'dotenv';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
+import path from 'path';
 import routes from './routes';
 import passportConfig from './config/passport.config';
 
@@ -16,7 +17,10 @@ app.use(express.json());
 app.use(passport.initialize());
 
 app.use('/', routes);
+app.use(express.static(path.join(__dirname, 'public')));
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => console.log(`App listening on port ${port}`));
+app.listen(port, () =>
+	console.log(`App listening on port ${port}`)
+);
