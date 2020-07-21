@@ -30,4 +30,8 @@ This API has different endpoints which are:
 - DELETE `/api/posts/:postId/comments/:commentId`: Delete comment
 - GET `/api/notifications`: Get recipient notifications
 - PATCH `/api/notifications/:notificationId/read` Read recipient notification
-- PATCH `/api/notifications/mark-as-read` Mark all unread notification as read   
+- PATCH `/api/notifications/mark-as-read` Mark all unread notification as read
+- PATCH `/api/posts/:postId/like` Like a post
+- GET `/api/posts/:postId/count-likes` Count the number of likes
+- PATCH `/api/posts/:postId/unlike` Unlike a post
+- GET `/api/posts/:postId/count-unlikes` Count the number of unlikes  

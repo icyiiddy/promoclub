@@ -36,6 +36,10 @@ class NotificationService {
 			returning: true,
 		});
 	}
+
+	static removeNotification(property) {
+		return Notification.destroy({ where: property });
+	}
 }
 
 export default NotificationService;
