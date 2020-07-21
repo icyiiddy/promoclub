@@ -34,7 +34,8 @@
     "pg": "^7.12.1",
     "pg-hstore": "^2.3.3",
     "regenerator-runtime": "^0.13.5",
-    "sequelize": "^6.2.3"
+    "sequelize": "^6.2.3",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.3",
