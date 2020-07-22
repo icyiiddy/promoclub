@@ -34,4 +34,5 @@ This API has different endpoints which are:
 - PATCH `/api/posts/:postId/like` Like a post
 - GET `/api/posts/:postId/count-likes` Count the number of likes
 - PATCH `/api/posts/:postId/unlike` Unlike a post
-- GET `/api/posts/:postId/count-unlikes` Count the number of unlikes  
+- GET `/api/posts/:postId/count-unlikes` Count the number of unlikes
+- GET `/api/search` Search user by First Name or Last Name  
