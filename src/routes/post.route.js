@@ -6,7 +6,7 @@ import {
 	validatePostUrlParam,
 	validateUserEditPost,
 } from '../validations/post.validation';
-import { checkPostOwner } from '../middlewares/post.middleware';
+import { checkPostOwner, checkLiked, checkUnliked } from '../middlewares/post.middleware';
 import CommentController from '../controllers/comment.controller';
 import {
 	checkPostExists,
@@ -68,6 +68,34 @@ router.delete(
 	checkPostExists,
 	checkComment,
 	CommentController.deleteComment
+);
+router.patch(
+	'/:postId/like',
+	allowAssessRoute,
+	validatePostUrlParam,
+	checkPostExists,
+	checkLiked,
+	PostController.likePost
+);
+router.get(
+	'/:postId/count-likes',
+	allowAssessRoute,
+	validatePostUrlParam,
+	PostController.getCountedLikes
+);
+router.patch(
+	'/:postId/unlike',
+	allowAssessRoute,
+	validatePostUrlParam,
+	checkPostExists,
+	checkUnliked,
+	PostController.unlikePost
+);
+router.get(
+	'/:postId/count-unlikes',
+	allowAssessRoute,
+	validatePostUrlParam,
+	PostController.getCountedUnlikes
 );
 
 export default router;
