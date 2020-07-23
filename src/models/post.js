@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
 			userId: DataTypes.INTEGER,
 			post: DataTypes.TEXT,
 			mediaFile: DataTypes.STRING,
+			fileType: DataTypes.STRING
 		},
 		{
 			sequelize,

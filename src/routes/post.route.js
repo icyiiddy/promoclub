@@ -21,7 +21,7 @@ const router = express.Router();
 
 router.post('/', allowAssessRoute, validateUserPost, PostController.postStatus);
 router.get('/', allowAssessRoute, PostController.viewPosts);
-router.get('/view', allowAssessRoute, PostController.viewOwnPosts);
+router.get('/view/:userId', allowAssessRoute, PostController.viewOwnPosts);
 router.patch(
 	'/:postId/edit',
 	allowAssessRoute,
@@ -53,7 +53,7 @@ router.get(
 	CommentController.viewComments
 );
 router.patch(
-	'/:postId/comments/:commentId',
+	'/:postId/comments/:commentId/edit',
 	allowAssessRoute,
 	validateUrlIds,
 	checkPostExists,
@@ -62,7 +62,7 @@ router.patch(
 	CommentController.editComment
 );
 router.delete(
-	'/:postId/comments/:commentId',
+	'/:postId/comments/:commentId/delete',
 	allowAssessRoute,
 	validateUrlIds,
 	checkPostExists,

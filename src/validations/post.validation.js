@@ -8,6 +8,7 @@ export async function validateUserPost(req, res, next) {
 			'any.required': 'Post is required',
 			'string.empty': 'Post is not allowed to be empty',
 		}),
+		mediaFile: Joi.string(),
 	}).options({ abortEarly: false });
 
 	const { error } = schema.validate(req.body);
@@ -15,10 +16,10 @@ export async function validateUserPost(req, res, next) {
 	if (error) {
 		const errors = error.details.map(error => error.message);
 		ResponseService.setError(400, errors);
-		ResponseService.send(res);
+		return ResponseService.send(res);
 	}
 
-	if (!req.files) {
+	if (!req.files && req.body.post) {
 		const post = await PostService.createPost({
 			userId: req.userData.id,
 			post: req.body.post,
@@ -82,7 +83,7 @@ export async function validateUserEditPost(req, res, next) {
 	if (error) {
 		const errors = error.details.map(error => error.message);
 		ResponseService.setError(400, errors);
-		ResponseService.send(res);
+		return ResponseService.send(res);
 	}
 
 	if (!req.files) {

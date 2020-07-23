@@ -21,17 +21,18 @@ This API has different endpoints which are:
 - PATCH `/api/auth/edit-profile/:id`: Edit user profile
 - POST `/api/posts`: Post a status
 - GET `/api/posts`: Get all posts
-- GET `/api/posts/view`: Get your own posts
+- GET `/api/posts/view/:userId`: Get your own posts
 - PATCH `/api/posts/:postId/edit`: Edit post status
 - DELETE `/api/posts/:postId/delete`: Detele post status
 - POST `/api/posts/:postId/comments`: Comment on a post
 - GET `/api/posts/:postId/comments`: View comments per post
-- PATCH `/api/posts/:postId/comments/:commentId`: Edit comment
-- DELETE `/api/posts/:postId/comments/:commentId`: Delete comment
+- PATCH `/api/posts/:postId/comments/:commentId/edit`: Edit comment
+- DELETE `/api/posts/:postId/comments/:commentId/delete`: Delete comment
 - GET `/api/notifications`: Get recipient notifications
 - PATCH `/api/notifications/:notificationId/read` Read recipient notification
 - PATCH `/api/notifications/mark-as-read` Mark all unread notification as read
 - PATCH `/api/posts/:postId/like` Like a post
 - GET `/api/posts/:postId/count-likes` Count the number of likes
 - PATCH `/api/posts/:postId/unlike` Unlike a post
-- GET `/api/posts/:postId/count-unlikes` Count the number of unlikes  
+- GET `/api/posts/:postId/count-unlikes` Count the number of unlikes
+- GET `/api/search` Search user by First Name or Last Name  

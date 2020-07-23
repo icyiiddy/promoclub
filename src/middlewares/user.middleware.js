@@ -66,6 +66,7 @@ export async function getGoogleProfileUserInfo(
 		lastName: profile._json.family_name,
 		email: profile._json.email,
 		password: BcryptService.hashPassword(Math.random().toString(36)),
+		profilePicture: profile._json.picture,
 	};
 	if (!user) {
 		await UserService.createUser(newUser);
@@ -183,13 +184,16 @@ export async function checkUserOwnProfile(req, res, next) {
 			'string.empty': 'Last Name is not allowed to be empty',
 			'string.min': 'Last Name length must be at least 2 characters long',
 		}),
-		dateOfBirth: JoiDate.date().utc().format('YYYY-MM-DD').messages({
+		dateOfBirth: JoiDate.date().max('now').utc().format('YYYY-MM-DD').messages({
 			'date.format': 'Date must be in YYYY-MM-DD format',
+			'date.max':
+				'Date of Birth must be less than or equal to the current date',
 		}),
 		address: Joi.string().min(4).messages({
 			'string.empty': 'Address is not allowed to be empty',
 			'string.min': 'Address length must be at least 4 characters long',
 		}),
+		profilePicture: Joi.string(),
 	}).options({ abortEarly: false });
 
 	const { error } = schema.validate(req.body);
@@ -201,7 +205,29 @@ export async function checkUserOwnProfile(req, res, next) {
 	}
 
 	if (!req.files) {
-		ResponseService.setError(400, 'No picture selected');
+		const id = parseInt(req.params.id);
+		await UserService.updateProperty(
+			{ id },
+			{
+				firstName: req.body.firstName,
+				lastName: req.body.lastName,
+				dateOfBirth: req.body.dateOfBirth,
+				address: req.body.address,
+			}
+		);
+		const {
+			firstName,
+			lastName,
+			dateOfBirth,
+			address,
+		} = await UserService.findByProperty({ id });
+
+		ResponseService.setSuccess(200, 'Profile has been updated', {
+			firstName,
+			lastName,
+			dateOfBirth,
+			address,
+		});
 		return ResponseService.send(res);
 	} else {
 		const { profilePicture } = req.files;

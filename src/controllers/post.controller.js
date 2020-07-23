@@ -8,12 +8,13 @@ import UnlikeService from '../services/unlike.service';
 class PostController {
 	static async postStatus(req, res) {
 		const { mediaFile } = req.files;
-		mediaFile.mv(`./src/uploads/${mediaFile.name}`);
+		mediaFile.mv(`./src/public/${mediaFile.name}`);
 
 		const post = await PostService.createPost({
 			userId: req.userData.id,
 			post: req.body.post,
 			mediaFile: mediaFile.name,
+			fileType: mediaFile.mimetype,
 		});
 		ResponseService.setSuccess(201, 'Your post was created', post);
 		return ResponseService.send(res);
@@ -42,7 +43,7 @@ class PostController {
 		const offset = (page - 1) * limit;
 
 		const results = await PostService.getOwnPosts(
-			{ userId: req.userData.id },
+			{ userId: req.params.userId },
 			{ offset, limit }
 		);
 		ResponseService.setSuccess(200, 'Your posts', {
@@ -63,7 +64,11 @@ class PostController {
 
 		const updatedPost = await PostService.updatePost(
 			{ id: parseInt(req.params.postId) },
-			{ post: req.body.post, mediaFile: mediaFile.name }
+			{
+				post: req.body.post,
+				mediaFile: mediaFile.name,
+				fileType: mediaFile.mimetype,
+			}
 		);
 		ResponseService.setSuccess(200, 'Post Updated', updatedPost);
 		return ResponseService.send(res);
@@ -136,7 +141,7 @@ class PostController {
 		const unlikes = await UnlikeService.countUnlike({
 			postId: parseInt(req.params.postId),
 		});
-		ResponseService.setSuccess(200, 'Total number of likes', unlikes);
+		ResponseService.setSuccess(200, 'Total number of dislikes', unlikes);
 		return ResponseService.send(res);
 	}
 }

@@ -10,6 +10,17 @@ class PostService {
 	static getPosts({ offset, limit }) {
 		return Post.findAndCountAll({
 			order: [['id', 'DESC']],
+			include: {
+				model: User,
+				attributes: [
+					'id',
+					'firstName',
+					'lastName',
+					'profilePicture',
+					'role',
+					'status',
+				],
+			},
 			offset,
 			limit,
 		});
@@ -21,6 +32,7 @@ class PostService {
 			include: {
 				model: User,
 				attributes: [
+					'id',
 					'firstName',
 					'lastName',
 					'profilePicture',

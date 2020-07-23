@@ -14,6 +14,7 @@ class CommentService {
 			include: {
 				model: User,
 				attributes: [
+					'id',
 					'firstName',
 					'lastName',
 					'profilePicture',
