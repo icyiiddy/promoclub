@@ -6,7 +6,11 @@ import {
 	validatePostUrlParam,
 	validateUserEditPost,
 } from '../validations/post.validation';
-import { checkPostOwner, checkLiked, checkUnliked } from '../middlewares/post.middleware';
+import {
+	checkPostOwner,
+	checkLiked,
+	checkUnliked,
+} from '../middlewares/post.middleware';
 import CommentController from '../controllers/comment.controller';
 import {
 	checkPostExists,
@@ -22,6 +26,7 @@ const router = express.Router();
 router.post('/', allowAssessRoute, validateUserPost, PostController.postStatus);
 router.get('/', allowAssessRoute, PostController.viewPosts);
 router.get('/view/:userId', allowAssessRoute, PostController.viewOwnPosts);
+router.get('/count/:userId', allowAssessRoute, PostController.countOwnPosts)
 router.patch(
 	'/:postId/edit',
 	allowAssessRoute,
@@ -52,6 +57,7 @@ router.get(
 	checkPostExists,
 	CommentController.viewComments
 );
+router.get('/comments', allowAssessRoute, CommentController.viewAllComments);
 router.patch(
 	'/:postId/comments/:commentId/edit',
 	allowAssessRoute,
@@ -78,9 +84,8 @@ router.patch(
 	PostController.likePost
 );
 router.get(
-	'/:postId/count-likes',
+	'/likes',
 	allowAssessRoute,
-	validatePostUrlParam,
 	PostController.getCountedLikes
 );
 router.patch(
@@ -92,7 +97,7 @@ router.patch(
 	PostController.unlikePost
 );
 router.get(
-	'/:postId/count-unlikes',
+	'/unlikes',
 	allowAssessRoute,
 	validatePostUrlParam,
 	PostController.getCountedUnlikes

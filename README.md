@@ -1,8 +1,9 @@
 # Promoclub
 
-Promoclub is a social media where people can share photos, videos and comments on different posts. 
+Promoclub is a social media where people can share photos, videos and comments on different posts.
 
 ## How you can access and test this API
+
 - Clone the repos
 - cd to the project directory
 - run `npm install` to install packages
@@ -19,9 +20,11 @@ This API has different endpoints which are:
 - PATCH `/api/auth/reset-password`: Reset password
 - GET `/api/auth/profile/:id`: View user profile
 - PATCH `/api/auth/edit-profile/:id`: Edit user profile
+- GET `/api/auth/users`: Get all users
 - POST `/api/posts`: Post a status
 - GET `/api/posts`: Get all posts
 - GET `/api/posts/view/:userId`: Get your own posts
+- GET `/api/posts/:postId`: Get single post
 - PATCH `/api/posts/:postId/edit`: Edit post status
 - DELETE `/api/posts/:postId/delete`: Detele post status
 - POST `/api/posts/:postId/comments`: Comment on a post
@@ -32,7 +35,7 @@ This API has different endpoints which are:
 - PATCH `/api/notifications/:notificationId/read` Read recipient notification
 - PATCH `/api/notifications/mark-as-read` Mark all unread notification as read
 - PATCH `/api/posts/:postId/like` Like a post
-- GET `/api/posts/:postId/count-likes` Count the number of likes
+- GET `/api/posts/likes` Count the number of likes
 - PATCH `/api/posts/:postId/unlike` Unlike a post
-- GET `/api/posts/:postId/count-unlikes` Count the number of unlikes
-- GET `/api/search` Search user by First Name or Last Name  
+- GET `/api/posts/unlikes` Count the number of unlikes
+- GET `/api/search` Search user by First Name or Last Name

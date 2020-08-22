@@ -46,6 +46,10 @@ class PostService {
 		});
 	}
 
+	static getAllOwnPosts(id) {
+		return Post.findAll({ where: id });
+	}
+
 	static findPost(postId) {
 		return Post.findOne({ where: postId });
 	}

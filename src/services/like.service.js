@@ -15,8 +15,8 @@ class LikeService {
 		return Like.destroy({ where: userId });
 	}
 
-	static countLike(likeId) {
-		return Like.count({ where: likeId });
+	static countLike() {
+		return Like.findAll();
 	}
 }
 

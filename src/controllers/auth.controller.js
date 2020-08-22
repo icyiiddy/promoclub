@@ -129,6 +129,8 @@ class AuthController {
 			dateOfBirth,
 			address,
 			profilePicture,
+			createdAt,
+			updatedAt,
 		} = await UserService.findByProperty({ id });
 
 		ResponseService.setSuccess(200, 'Profile has been updated', {
@@ -137,7 +139,23 @@ class AuthController {
 			dateOfBirth,
 			address,
 			profilePicture,
+			createdAt,
+			updatedAt,
 		});
+		return ResponseService.send(res);
+	}
+
+	static async getUsers(req, res) {
+		const usersData = await UserService.findAllUsers();
+		const users = usersData.map(userData => {
+			return {
+				id: userData.id,
+				firstName: userData.firstName,
+				lastName: userData.lastName,
+				profilePicture: userData.profilePicture,
+			};
+		});
+		ResponseService.setSuccess(200, 'All users', users);
 		return ResponseService.send(res);
 	}
 }

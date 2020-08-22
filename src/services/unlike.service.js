@@ -15,8 +15,8 @@ class UnlikeService {
 		return Unlike.destroy({ where: userId });
 	}
 
-	static countUnlike(likeId) {
-		return Unlike.count({ where: likeId });
+	static countUnlike() {
+		return Unlike.findAll();
 	}
 }
 

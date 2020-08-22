@@ -220,6 +220,8 @@ export async function checkUserOwnProfile(req, res, next) {
 			lastName,
 			dateOfBirth,
 			address,
+			createdAt,
+			updatedAt,
 		} = await UserService.findByProperty({ id });
 
 		ResponseService.setSuccess(200, 'Profile has been updated', {
@@ -227,6 +229,8 @@ export async function checkUserOwnProfile(req, res, next) {
 			lastName,
 			dateOfBirth,
 			address,
+			createdAt,
+			updatedAt,
 		});
 		return ResponseService.send(res);
 	} else {

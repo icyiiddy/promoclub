@@ -58,9 +58,15 @@ class PostController {
 		return ResponseService.send(res);
 	}
 
+	static async countOwnPosts(req, res) {
+		const ownPosts = await PostService.getAllOwnPosts({ userId: req.userData.id });
+		ResponseService.setSuccess(200, 'Count your posts', ownPosts);
+		return ResponseService.send(res);
+	}
+
 	static async editPost(req, res) {
 		const { mediaFile } = req.files;
-		mediaFile.mv(`./src/uploads/${mediaFile.name}`);
+		mediaFile.mv(`./src/public/${mediaFile.name}`);
 
 		const updatedPost = await PostService.updatePost(
 			{ id: parseInt(req.params.postId) },
@@ -70,7 +76,11 @@ class PostController {
 				fileType: mediaFile.mimetype,
 			}
 		);
-		ResponseService.setSuccess(200, 'Post Updated', updatedPost);
+		ResponseService.setSuccess(
+			200,
+			'Post Updated',
+			updatedPost[1][0].dataValues
+		);
 		return ResponseService.send(res);
 	}
 
@@ -99,20 +109,20 @@ class PostController {
 			isLiked: true,
 		});
 
-		await NotificationService.createNotification({
-			senderId: userId,
-			recipientId: recipient.userId,
-			postId,
-			type: 'like',
-		});
+		if (recipient.userId !== userId) {
+			await NotificationService.createNotification({
+				senderId: userId,
+				recipientId: recipient.userId,
+				postId,
+				type: 'like',
+			});
+		}
 		ResponseService.setSuccess(201, 'You like this post', liked);
 		return ResponseService.send(res);
 	}
 
 	static async getCountedLikes(req, res) {
-		const likes = await LikeService.countLike({
-			postId: parseInt(req.params.postId),
-		});
+		const likes = await LikeService.countLike();
 		ResponseService.setSuccess(200, 'Total number of likes', likes);
 		return ResponseService.send(res);
 	}
@@ -138,9 +148,7 @@ class PostController {
 	}
 
 	static async getCountedUnlikes(req, res) {
-		const unlikes = await UnlikeService.countUnlike({
-			postId: parseInt(req.params.postId),
-		});
+		const unlikes = await UnlikeService.countUnlike();
 		ResponseService.setSuccess(200, 'Total number of dislikes', unlikes);
 		return ResponseService.send(res);
 	}

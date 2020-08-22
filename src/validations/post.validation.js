@@ -76,6 +76,7 @@ export async function validateUserEditPost(req, res, next) {
 			'any.required': 'Post is required',
 			'string.empty': 'Post is not allowed to be empty',
 		}),
+		mediaFile: Joi.string(),
 	}).options({ abortEarly: false });
 
 	const { error } = schema.validate(req.body);
@@ -86,12 +87,13 @@ export async function validateUserEditPost(req, res, next) {
 		return ResponseService.send(res);
 	}
 
-	if (!req.files) {
+	if (!req.files && req.body.post) {
 		const updatedPost = await PostService.updatePost(
 			{ id: parseInt(req.params.postId) },
 			{ post: req.body.post }
 		);
-		ResponseService.setSuccess(200, 'Post updated', updatedPost);
+
+		ResponseService.setSuccess(200, 'Post updated', updatedPost[1][0].dataValues);
 		return ResponseService.send(res);
 	} else {
 		const { mediaFile } = req.files;

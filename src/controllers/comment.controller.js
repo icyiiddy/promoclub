@@ -48,18 +48,28 @@ class CommentController {
 		return ResponseService.send(res);
 	}
 
+	static async viewAllComments(req, res) {
+		const comments = await CommentService.getComments();
+		ResponseService.setSuccess(200, 'All comments posted', comments);
+		return ResponseService.send(res);
+	}
+
 	static async editComment(req, res) {
 		const updatedComment = await CommentService.updateComment(
 			{ id: parseInt(req.params.commentId) },
 			{ comment: req.body.comment }
 		);
-		ResponseService.setSuccess(200, 'Comment updated', updatedComment);
+		ResponseService.setSuccess(
+			200,
+			'Comment updated',
+			updatedComment[1][0].dataValues
+		);
 		return ResponseService.send(res);
 	}
 
 	static async deleteComment(req, res) {
 		await CommentService.destroyComment({ id: parseInt(req.params.commentId) });
-		ResponseService.setSuccess(200, 'Comment was deleted');
+		ResponseService.setSuccess(200, 'Comment was deleted', Math.random());
 		return ResponseService.send(res);
 	}
 }

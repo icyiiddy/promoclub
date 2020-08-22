@@ -28,7 +28,7 @@ class NotificationController {
 			{ id: parseInt(req.params.notificationId) },
 			{ read: true }
 		);
-		ResponseService.setSuccess(200, 'Notification was read', read);
+		ResponseService.setSuccess(200, 'Notification was read', read[1][0].dataValues);
 		return ResponseService.send(res);
 	}
 
@@ -38,6 +38,14 @@ class NotificationController {
 			{ read: true }
 		);
 		ResponseService.setSuccess(200, 'Notifications marked as read', read);
+		return ResponseService.send(res);
+	}
+
+	static async countUnreadNotifications(req, res) {
+		const notifications = await NotificationService.countNotifications({
+			read: false,
+		});
+		ResponseService.setSuccess(200, 'All unread notifications', notifications);
 		return ResponseService.send(res);
 	}
 }

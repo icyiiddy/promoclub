@@ -8,15 +8,16 @@ class NotificationService {
 	}
 
 	static getAllNofications(property, { offset, limit }) {
-		return Notification.findAndCountAll(
-			{
-				where: property,
-				order: [['id', 'DESC']],
-				include: { model: User, attributes: ['id', 'firstName', 'lastName'] },
+		return Notification.findAndCountAll({
+			where: property,
+			order: [['id', 'DESC']],
+			include: {
+				model: User,
+				attributes: ['id', 'firstName', 'lastName'],
 			},
 			offset,
-			limit
-		);
+			limit,
+		});
 	}
 
 	static findNotification(property) {
@@ -39,6 +40,10 @@ class NotificationService {
 
 	static removeNotification(property) {
 		return Notification.destroy({ where: property });
+	}
+
+	static countNotifications(property) {
+		return Notification.findAll({ where: property });
 	}
 }
 

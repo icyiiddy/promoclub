@@ -26,8 +26,8 @@ class UserService {
 		});
 	}
 
-	static findAllUsers(property) {
-		return User.findAll({ where: property });
+	static findAllUsers() {
+		return User.findAll();
 	}
 }
 
