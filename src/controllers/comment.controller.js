@@ -48,6 +48,12 @@ class CommentController {
 		return ResponseService.send(res);
 	}
 
+	static async viewAllComments(req, res) {
+		const comments = await CommentService.getComments();
+		ResponseService.setSuccess(200, 'All comments posted', comments);
+		return ResponseService.send(res);
+	}
+
 	static async editComment(req, res) {
 		const updatedComment = await CommentService.updateComment(
 			{ id: parseInt(req.params.commentId) },

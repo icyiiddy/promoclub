@@ -6,7 +6,11 @@ import {
 	validatePostUrlParam,
 	validateUserEditPost,
 } from '../validations/post.validation';
-import { checkPostOwner, checkLiked, checkUnliked } from '../middlewares/post.middleware';
+import {
+	checkPostOwner,
+	checkLiked,
+	checkUnliked,
+} from '../middlewares/post.middleware';
 import CommentController from '../controllers/comment.controller';
 import {
 	checkPostExists,
@@ -52,6 +56,7 @@ router.get(
 	checkPostExists,
 	CommentController.viewComments
 );
+router.get('/comments', allowAssessRoute, CommentController.viewAllComments);
 router.patch(
 	'/:postId/comments/:commentId/edit',
 	allowAssessRoute,

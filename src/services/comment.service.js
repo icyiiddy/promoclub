@@ -31,6 +31,10 @@ class CommentService {
 		return Comment.findOne({ where: commentId });
 	}
 
+	static getComments() {
+		return Comment.findAll();
+	}
+
 	static updateComment(commentId, property) {
 		return Comment.update(property, { where: commentId, returning: true });
 	}
