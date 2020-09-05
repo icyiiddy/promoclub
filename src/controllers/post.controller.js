@@ -8,7 +8,7 @@ import UnlikeService from '../services/unlike.service';
 class PostController {
 	static async postStatus(req, res) {
 		const { mediaFile } = req.files;
-		mediaFile.mv(`./src/public/${mediaFile.name}`);
+		mediaFile.mv(`${process.env.FILE_PATH}/${mediaFile.name}`);
 
 		const post = await PostService.createPost({
 			userId: req.userData.id,
@@ -74,7 +74,7 @@ class PostController {
 
 	static async editPost(req, res) {
 		const { mediaFile } = req.files;
-		mediaFile.mv(`./src/public/${mediaFile.name}`);
+		mediaFile.mv(`${process.env.FILE_PATH}/${mediaFile.name}`);
 
 		const updatedPost = await PostService.updatePost(
 			{ id: parseInt(req.params.postId) },
