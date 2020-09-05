@@ -4,9 +4,9 @@
   "description": "Social Media Web Application",
   "main": "app.js",
   "scripts": {
-    "dev-server": "nodemon --exec babel-node src/app.js",
     "build": "babel src  --out-dir production",
-    "start": "node --exec babel-node src/app.js",
+    "start": "node production/app.js",
+    "dev-server": "nodemon --exec babel-node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
