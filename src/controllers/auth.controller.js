@@ -109,7 +109,7 @@ class AuthController {
 
 	static async editUserProfile(req, res) {
 		req.files.profilePicture.mv(
-			`./src/public/${req.files.profilePicture.name}`
+			`${process.env.FILE_PATH}/${req.files.profilePicture.name}`
 		);
 		const id = parseInt(req.params.id);
 		await UserService.updateProperty(
